@@ -1,0 +1,435 @@
+/* =========================
+   VARIABLES DE COLOR
+========================= */
+:root {
+  --color-primary: #9b6bb3;
+  --color-secondary: #e6d4f0;
+  --color-dark: #1e0a28;
+  --color-light: #f8f9fa;
+  --color-text: #333;
+}
+
+/* =========================
+   RESET BÁSICO
+========================= */
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* =========================
+   ESTILOS GENERALES
+========================= */
+body {
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--color-text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.section-padding {
+  padding: 80px 0;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 40px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* =========================
+   NAVBAR
+========================= */
+.navbar-brand img {
+  height: 60px;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #ddd;
+  transition: color 0.3s ease;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: var(--color-secondary);
+}
+
+/* =========================
+   HERO BANNER (IMAGEN LIMPIA)
+========================= */
+.hero-banner {
+  height: 60vh;
+  background-image: url("../assets/img/hero-banner.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* =========================
+   HERO HORIZONTAL (TEXTO SOBRE IMAGEN)
+========================= */
+.hero-content-horizontal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6%;
+}
+
+/* Texto lateral */
+.hero-text {
+  width: 30%;
+  color: hsl(278, 42%, 64%);
+  text-shadow: 0 4px 14px rgba(0,0,0,0.5);
+}
+
+.hero-left h2 {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.hero-right h3 {
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: right;
+  line-height: 1.2;
+}
+
+/* Centro vacío (imagen ya está en el background) */
+.hero-image {
+  width: 40%;
+}
+
+/* =========================
+   MENSAJE PRINCIPAL
+========================= */
+.intro-subtitle {
+  font-size: 1.15rem;
+  color: #555;
+}
+
+.intro-subtitle span {
+ font-size: 1.15rem;
+  color: #555;
+}
+
+.social-section a {
+  color: var(--color-primary);
+  font-size: 1.9rem;
+  margin: 0 12px;
+  opacity: 0.85;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.social-section a:hover {
+  opacity: 1;
+  transform: translateY(-4px);
+}
+
+/* =========================
+   SOBRE MI
+========================= */
+#sobre-mi p {
+  max-width: 800px;
+  margin: 0 auto 15px;
+  text-align: center;
+}
+
+/* =========================
+   HABILIDADES
+========================= */
+.habilidades-section {
+  background-color: var(--color-light);
+}
+
+#habilidades h5 {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+#habilidades p {
+  font-size: 0.95rem;
+}
+
+/* =========================
+   PROYECTOS
+========================= */
+.card {
+  border: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.btn-outline-primary {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+/* =========================
+   CONTACTO
+========================= */
+#contacto a {
+  text-decoration: none;
+}
+
+#contacto a:hover {
+  text-decoration: underline;
+}
+
+#contacto {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+#contacto p {
+  margin-bottom: 25px;
+}
+
+#contacto ul {
+  padding: 0;
+  margin: 0;
+}
+
+#contacto li {
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer {
+  font-size: 0.85rem;
+}
+
+/* =========================
+   AVATAR ASISTENTE
+========================= */
+.avatar-assistant {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 90px;
+  z-index: 9999;
+  cursor: pointer;
+  animation: float 4s ease-in-out infinite;
+}
+
+.avatar-assistant img {
+  width: 100%;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.3));
+}
+
+/* Animación flotante */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+/* Saludo */
+.wave {
+  animation: wave 1s ease-in-out 2;
+}
+
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(6deg); }
+  50% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* =========================
+   CHATBOT
+========================= */
+.chatbot {
+  position: fixed;
+  bottom: 130px;
+  right: 24px;
+  width: 280px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  display: none;
+  flex-direction: column;
+  z-index: 9998;
+  overflow: hidden;
+}
+
+.chatbot-header {
+  background: var(--color-primary);
+  color: #ffffff;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.chatbot-body {
+  padding: 12px;
+  font-size: 0.9rem;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.bot-message {
+  background: var(--color-secondary);
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.chatbot-options {
+  display: none;
+  flex-direction: column;
+  padding: 10px;
+  gap: 8px;
+}
+
+.chatbot-options button {
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* =========================
+   MODO OSCURO
+========================= */
+.dark-mode {
+  background-color: #121212;
+  color: #f1f1f1;
+}
+
+.dark-mode .section-title {
+  color: #d7b7e5;
+}
+
+.dark-mode .intro-section {
+  background-color: #121212;
+}
+
+.dark-mode .intro-subtitle {
+  color: #e6e6e6;
+}
+.dark-mode .intro-subtitle span {
+  color: #e6e6e6;
+}
+
+.dark-mode .habilidades-section {
+  background-color: #1a1a1a;
+}
+
+.dark-mode .habilidades-section h5 {
+  color: #cfa8e3;
+}
+
+.dark-mode .habilidades-section p {
+  color: #e6e6e6;
+}
+
+.dark-mode .card {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+
+/* Botón modo oscuro */
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 9999;
+}
+
+/* =========================
+   ANIMACIONES SCROLL
+========================= */
+.hidden {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease;
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 992px) {
+  .hero-content-horizontal {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-text,
+  .hero-image {
+    width: 100%;
+  }
+
+  .hero-right h3 {
+    text-align: center;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-banner {
+    height: 45vh;
+  }
+
+  .intro-title {
+    font-size: 2.2rem;
+  }
+
+  .section-padding {
+    padding: 60px 0;
+  }
+
+  .avatar-assistant {
+    width: 70px;
+  }
+
+  .chatbot {
+    width: 250px;
+  }
+}
