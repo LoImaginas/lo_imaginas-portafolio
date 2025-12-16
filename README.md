@@ -37,7 +37,7 @@ El sitio es completamente **responsive**, cuenta con **interactividad en JavaScr
 
 ## 🔗 Enlace al Portafolio en Vivo
 
-👉 **[Ver Portafolio](https://loimaginas.github.io/)**  
+👉 **[Ver Portafolio](https://loimaginas.github.io/lo_imaginas-portafolio/)**  
 
 ---
 
