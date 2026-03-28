@@ -7,23 +7,23 @@ const projects = [
     description:
       'Proyecto Full Stack desarrollado con Django, enfocado en estructura web, contenido dinámico y organización de una aplicación funcional.',
     technologies: ['Django', 'Python', 'HTML', 'CSS'],
-    github: 'https://github.com/LoImaginas/OnlyFlans',
-    image: new URL('../assets/img/onlyflans.png', import.meta.url).href
+    repoUrl: 'https://github.com/LoImaginas/OnlyFlans',
+    image: new URL('../assets/img/OnlyFlans.png', import.meta.url).href
   },
   {
     title: 'Viajes Chile',
     description:
       'Sitio web responsive desarrollado con HTML, CSS y JavaScript, enfocado en diseño visual, estructura clara y experiencia de usuario.',
     technologies: ['HTML', 'CSS', 'JavaScript', 'Bootstrap'],
-    github: 'https://github.com/LoImaginas/Prueba-Viajes-Chile',
-    image: new URL('../assets/img/viajeschile.png', import.meta.url).href
+    repoUrl: 'https://github.com/LoImaginas/Prueba-Viajes-Chile',
+    image: new URL('../assets/img/ViajesChile.png', import.meta.url).href
   },
   {
     title: 'Coffee & Muffin',
     description:
       'Proyecto web desarrollado con enfoque en presentación visual, estructura clara y una experiencia amigable para el usuario.',
     technologies: ['HTML', 'CSS', 'JavaScript'],
-    github: 'https://github.com/LoImaginas/Coffe-Muffins',
+    repoUrl: 'https://github.com/LoImaginas/Coffe-Muffins',
     image: new URL('../assets/img/coffe&muffin.png', import.meta.url).href
   },
   {
@@ -31,7 +31,7 @@ const projects = [
     description:
       'Proyecto desarrollado como parte del módulo 3, orientado a reforzar estructura, navegación y lógica aplicada en desarrollo web.',
     technologies: ['HTML', 'CSS', 'JavaScript'],
-    github: 'https://github.com/LoImaginas/Evaluacion_Modulo3',
+    repoUrl: 'https://github.com/LoImaginas/Evaluacion_Modulo3',
     image: new URL('../assets/img/conectafacil.png', import.meta.url).href
   }
 ]
@@ -52,8 +52,7 @@ const projects = [
           :key="project.title"
           :title="project.title"
           :description="project.description"
-          :technologies="project.technologies"
-          :github="project.github"
+          :repo-url="project.repoUrl"
           :image="project.image"
         />
       </div>
