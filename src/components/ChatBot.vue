@@ -1,138 +1,167 @@
 <script setup>
-import { ref } from 'vue'
+import { nextTick, onBeforeUnmount, ref } from 'vue'
+
+const avatarUrl = new URL('../assets/img/Flotante_trim.backup2.png', import.meta.url).href
 
 const isOpen = ref(false)
 const isTyping = ref(false)
 const inputMessage = ref('')
+const chatBodyRef = ref(null)
 
 const messages = ref([
   {
+    id: Date.now(),
     sender: 'bot',
-    text: 'Hola 💜 soy Lo Bot. Puedo orientarte sobre servicios, contacto, proyectos y herramientas útiles.'
+    text: 'Hola, soy Lo Bot. Puedo orientarte sobre servicios, proyectos, contacto y herramientas utiles.'
   }
 ])
 
 const quickOptions = [
   {
     label: 'Servicios',
-    response:
-      'Brindo asesorías en contabilidad básica, RRHH, formalización y apoyo digital para PYMES.'
+    response: 'Brindo asesorias en contabilidad basica, RRHH, formalizacion y apoyo digital para PYMES.'
   },
   {
     label: 'Proyectos',
-    response:
-      'Puedes revisar mis proyectos en la sección Proyectos, donde muestro trabajos desarrollados con HTML, CSS, JavaScript y Vue.'
+    response: 'Puedes revisar mis proyectos en la seccion Proyectos del portafolio.'
   },
   {
     label: 'Contacto',
-    response:
-      'Puedes escribirme a mllanquinaop@correo.uss.cl o revisar la sección Contacto del portafolio.'
+    response: 'Puedes escribirme a mllanquinaop@correo.uss.cl o ir a la seccion Contacto.'
   },
   {
-    label: 'Herramientas útiles',
-    response:
-      'En este portafolio encontrarás herramientas pensadas para emprendedores, como calculadora de boletas y accesos útiles.'
+    label: 'Herramientas',
+    response: 'En Herramientas utiles encontraras calculadora de boletas y enlaces de apoyo.'
   }
 ]
 
+const keywordRules = [
+  {
+    keywords: ['servicio', 'asesoria'],
+    response: 'Ofrezco apoyo en contabilidad basica, RRHH, formalizacion y acompanamiento para PYMES.'
+  },
+  {
+    keywords: ['precio', 'valor', 'costo'],
+    response: 'Los precios dependen del alcance del trabajo. Escribeme y revisamos tu caso.'
+  },
+  {
+    keywords: ['contacto', 'correo', 'email'],
+    response: 'Puedes contactarme en mllanquinaop@correo.uss.cl o desde la seccion Contacto.'
+  },
+  {
+    keywords: ['github', 'repositorio'],
+    response: 'Puedes revisar mis repositorios en: https://github.com/LoImaginas'
+  },
+  {
+    keywords: ['proyecto'],
+    response: 'En la seccion Proyectos veras trabajos publicados y casos reales.'
+  },
+  {
+    keywords: ['herramienta', 'boleta', 'sii'],
+    response: 'En la seccion Herramientas utiles tienes recursos practicos para emprendedores.'
+  }
+]
+
+const defaultResponse =
+  'Aun estoy aprendiendo. Por ahora puedo orientarte sobre servicios, proyectos, contacto y herramientas utiles.'
+
+let typingTimer = null
+
+const addMessage = (sender, text) => {
+  messages.value.push({
+    id: Date.now() + Math.random(),
+    sender,
+    text
+  })
+}
+
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (!chatBodyRef.value) return
+    chatBodyRef.value.scrollTop = chatBodyRef.value.scrollHeight
+  })
+}
+
+const getResponse = (userText) => {
+  const lower = userText.toLowerCase()
+  const foundRule = keywordRules.find((rule) => rule.keywords.some((word) => lower.includes(word)))
+  return foundRule ? foundRule.response : defaultResponse
+}
+
 const botReply = (text) => {
   isTyping.value = true
+  scrollToBottom()
 
-  setTimeout(() => {
-    messages.value.push({
-      sender: 'bot',
-      text
-    })
+  clearTimeout(typingTimer)
+  typingTimer = setTimeout(() => {
+    addMessage('bot', text)
     isTyping.value = false
-  }, 1200)
+    scrollToBottom()
+  }, 900)
 }
 
 const handleQuickOption = (option) => {
-  messages.value.push({
-    sender: 'user',
-    text: option.label
-  })
-
+  addMessage('user', option.label)
   botReply(option.response)
+  scrollToBottom()
 }
 
 const sendMessage = () => {
   const userText = inputMessage.value.trim()
   if (!userText) return
 
-  messages.value.push({
-    sender: 'user',
-    text: userText
-  })
-
-  const lower = userText.toLowerCase()
-
-  let response = 'Aún estoy aprendiendo 😊. Por ahora puedo orientarte sobre servicios, proyectos, contacto y herramientas útiles.'
-
-  if (lower.includes('servicio') || lower.includes('asesoría')) {
-    response =
-      'Ofrezco apoyo en contabilidad básica, RRHH, formalización y acompañamiento para PYMES.'
-  } else if (lower.includes('precio') || lower.includes('valor') || lower.includes('costo')) {
-    response =
-      'Los precios dependen del tipo de trabajo o asesoría. Puedes escribirme y te ayudo a revisar tu caso.'
-  } else if (lower.includes('contacto') || lower.includes('correo') || lower.includes('email')) {
-    response =
-      'Puedes contactarme en mllanquinaop@correo.uss.cl o desde la sección Contacto del portafolio.'
-  } else if (lower.includes('github')) {
-    response =
-      'Puedes revisar mis proyectos y repositorios en mi perfil de GitHub: https://github.com/LoImaginas'
-  } else if (lower.includes('proyecto')) {
-    response =
-      'En la sección Proyectos encontrarás ejemplos de trabajos que he desarrollado y publicado.'
-  } else if (lower.includes('herramienta') || lower.includes('boleta') || lower.includes('sii')) {
-    response =
-      'En la sección Herramientas útiles encontrarás recursos pensados para personas que necesitan apoyo práctico y simple.'
-  }
-
+  addMessage('user', userText)
   inputMessage.value = ''
-  botReply(response)
+
+  botReply(getResponse(userText))
+  scrollToBottom()
 }
+
+const toggleChat = () => {
+  isOpen.value = !isOpen.value
+  if (isOpen.value) scrollToBottom()
+}
+
+onBeforeUnmount(() => {
+  clearTimeout(typingTimer)
+})
 </script>
 
 <template>
   <div class="chatbot-wrap">
     <button
       class="chatbot-avatar"
+      :class="{ 'is-docked': isOpen }"
       type="button"
-      @click="isOpen = !isOpen"
+      @click="toggleChat"
       aria-label="Abrir chatbot"
     >
-      <img src="/patita.webp" alt="Abrir chatbot" />
+      <img :src="avatarUrl" alt="Abrir chatbot" />
     </button>
 
-    <section v-if="isOpen" class="chatbot-panel">
+    <section v-if="isOpen" class="chatbot-panel" aria-label="Chat Lo Bot">
       <header class="chatbot-header">
         <div>
           <h3>Lo Bot</h3>
-          <small>En línea</small>
+          <small>En linea</small>
         </div>
-        <button type="button" @click="isOpen = false">✕</button>
+        <button type="button" aria-label="Cerrar chatbot" @click="isOpen = false">X</button>
       </header>
 
-      <div class="chatbot-body">
+      <div ref="chatBodyRef" class="chatbot-body">
         <div
-          v-for="(msg, index) in messages"
-          :key="index"
+          v-for="msg in messages"
+          :key="msg.id"
           class="message-row"
           :class="msg.sender === 'user' ? 'user-row' : 'bot-row'"
         >
-          <div
-            class="message-bubble"
-            :class="msg.sender === 'user' ? 'user-bubble' : 'bot-bubble'"
-          >
+          <div class="message-bubble" :class="msg.sender === 'user' ? 'user-bubble' : 'bot-bubble'">
             {{ msg.text }}
           </div>
         </div>
 
         <div v-if="isTyping" class="message-row bot-row">
-          <div class="message-bubble bot-bubble typing">
-            Lo Bot está escribiendo...
-          </div>
+          <div class="message-bubble bot-bubble typing">Lo Bot esta escribiendo...</div>
         </div>
       </div>
 
@@ -148,11 +177,7 @@ const sendMessage = () => {
       </div>
 
       <form class="chatbot-input-area" @submit.prevent="sendMessage">
-        <input
-          v-model="inputMessage"
-          type="text"
-          placeholder="Escribe tu mensaje..."
-        />
+        <input v-model="inputMessage" type="text" placeholder="Escribe tu mensaje..." />
         <button type="submit">Enviar</button>
       </form>
     </section>
@@ -162,44 +187,91 @@ const sendMessage = () => {
 <style scoped>
 .chatbot-wrap {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
+  right: 20px;
+  bottom: 20px;
   z-index: 1200;
 }
 
 .chatbot-avatar {
-  width: 68px;
-  height: 68px;
-  border: none;
-  border-radius: 50%;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 132px;
+  height: 132px;
+  border: 0;
   background: transparent;
   padding: 0;
   cursor: pointer;
+  z-index: 1201;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  box-shadow: none;
+  overflow: visible;
+  transition: right 0.35s ease, bottom 0.35s ease, transform 0.35s ease;
+}
+
+.chatbot-avatar.is-docked {
+  right: 14px;
+  bottom: calc(150px + 520px - 70px);
+  z-index: 1202;
 }
 
 .chatbot-avatar img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 0;
+  filter: none;
+  animation: floatAvatar 3.5s ease-in-out infinite;
+  -webkit-mask-image:
+    radial-gradient(ellipse 44% 28% at 50% 28%, #000 68%, transparent 100%),
+    radial-gradient(ellipse 17% 40% at 50% 78%, #000 62%, transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%, 100% 100%;
+  mask-image:
+    radial-gradient(ellipse 44% 28% at 50% 28%, #000 68%, transparent 100%),
+    radial-gradient(ellipse 17% 40% at 50% 78%, #000 62%, transparent 100%);
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%, 100% 100%;
+}
+
+.chatbot-avatar.is-docked img {
+  animation: none;
+}
+
+@keyframes floatAvatar {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .chatbot-panel {
+  position: fixed;
+  right: 20px;
+  bottom: 150px;
   width: 330px;
   height: 520px;
-  background: #ffffff;
+  background: #fff;
   border-radius: 20px;
   box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
   overflow: hidden;
-  margin-bottom: 12px;
   display: flex;
   flex-direction: column;
+  z-index: 1200;
 }
 
 .chatbot-header {
   background: #9b6bb3;
-  color: white;
+  color: #fff;
   padding: 12px 14px;
   display: flex;
   justify-content: space-between;
@@ -216,9 +288,9 @@ const sendMessage = () => {
 }
 
 .chatbot-header button {
-  border: none;
+  border: 0;
   background: transparent;
-  color: white;
+  color: #fff;
   font-size: 1rem;
   cursor: pointer;
 }
@@ -261,7 +333,7 @@ const sendMessage = () => {
 
 .user-bubble {
   background: #b57edc;
-  color: white;
+  color: #fff;
   border-bottom-right-radius: 6px;
 }
 
@@ -280,7 +352,7 @@ const sendMessage = () => {
 }
 
 .chatbot-quick-actions button {
-  border: none;
+  border: 0;
   background: #efe4f6;
   color: #5b3c6e;
   padding: 8px 10px;
@@ -310,18 +382,44 @@ const sendMessage = () => {
 }
 
 .chatbot-input-area button {
-  border: none;
+  border: 0;
   background: #9b6bb3;
-  color: white;
+  color: #fff;
   border-radius: 999px;
   padding: 10px 14px;
   cursor: pointer;
 }
 
+.chatbot-input-area button:hover {
+  background: #8a5ea0;
+}
+
+.chatbot-header button:focus-visible,
+.chatbot-quick-actions button:focus-visible,
+.chatbot-input-area button:focus-visible,
+.chatbot-input-area input:focus-visible {
+  outline: 2px solid #4f2d64;
+  outline-offset: 2px;
+}
+
 @media (max-width: 480px) {
+  .chatbot-avatar {
+    width: 112px;
+    height: 112px;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .chatbot-avatar.is-docked {
+    right: 8px;
+    bottom: calc(124px + min(520px, calc(100vh - 120px)) - 56px);
+  }
+
   .chatbot-panel {
-    width: 300px;
-    height: 480px;
+    width: min(320px, calc(100vw - 16px));
+    height: min(520px, calc(100vh - 120px));
+    right: 8px;
+    bottom: 124px;
   }
 }
 </style>

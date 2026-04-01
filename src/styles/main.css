@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap');
 
 :root {
-  --bg: #f4f6f8;
-  --bg-alt: #e9eef2;
+  --bg: #f3edf6;
+  --bg-alt: #ece3f1;
   --surface: #ffffff;
-  --text: #0f1720;
-  --muted: #465467;
-  --primary: #0c4a6e;
-  --primary-soft: #bae6fd;
-  --accent: #ea580c;
-  --border: #d4dbe3;
-  --shadow: 0 18px 40px rgba(15, 23, 32, 0.08);
+  --text: #2f2638;
+  --muted: #5f5369;
+  --primary: #4f3261;
+  --primary-soft: #e7d9ef;
+  --accent: #7a4b8e;
+  --border: #c8b7d2;
+  --shadow: 0 18px 40px rgba(51, 33, 66, 0.1);
 }
 
 * {
@@ -23,8 +23,8 @@ body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top right, #dff0ff 10%, transparent 55%),
-    radial-gradient(circle at bottom left, #ffe7db 12%, transparent 40%),
+    radial-gradient(circle at top right, #efe5f5 8%, transparent 54%),
+    radial-gradient(circle at bottom left, #e6d6ef 12%, transparent 44%),
     var(--bg);
 }
 
@@ -64,7 +64,7 @@ img {
   z-index: 50;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(12, 74, 110, 0.15);
+  border-bottom: 1px solid rgba(79, 50, 97, 0.18);
 }
 
 .navbar {
@@ -78,14 +78,13 @@ img {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 800;
-  color: var(--primary);
+  justify-content: center;
 }
 
 .brand img {
-  width: 42px;
+  width: 78px;
+  height: auto;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .nav-toggle {
@@ -137,7 +136,7 @@ img {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #d5ecff;
+  color: #f0dff8;
 }
 
 .hero h1 {
@@ -171,9 +170,9 @@ img {
 
 .panel {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 1rem;
-  box-shadow: var(--shadow);
+  box-shadow: 0 14px 30px rgba(49, 34, 61, 0.12);
   padding: 1.2rem;
 }
 
@@ -267,7 +266,14 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 1rem;
+}
+
+.footer-tech {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .chatbot-wrap {

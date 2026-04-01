@@ -1,5 +1,3 @@
-import { RouterLink } from 'vue-router'
-
 <script setup>
 import { ref } from 'vue'
 
@@ -23,8 +21,7 @@ const closeMenu = () => {
   <header class="navbar-wrap">
     <nav class="navbar container">
       <RouterLink class="brand" to="/" @click="closeMenu">
-        <img :src="logoUrl" alt="Logo Lo Imaginas" />
-        <span>Lo Imaginas</span>
+        <img :src="logoUrl" alt="Logo principal" />
       </RouterLink>
 
       <button class="nav-toggle" type="button" @click="isOpen = !isOpen" aria-label="Abrir menú">

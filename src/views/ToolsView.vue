@@ -1,165 +1,211 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const monto = ref(0)
-
-const year = new Date().getFullYear()
-
-const porcentaje = computed(() => {
-  if (year >= 2027) return 0.16
-  return 0.1525 // 2026
-})
-
-const retencion = computed(() => monto.value > 0 ? monto.value * porcentaje.value : 0)
-const total = computed(() => monto.value > 0 ? monto.value - retencion.value : 0)
-
-// 📅 FECHA ACTUAL
 const today = new Date()
 const currentMonth = today.getMonth()
 const currentYear = today.getFullYear()
+const monthName = today.toLocaleDateString('es-CL', { month: 'long' })
+const monthLabel = `${monthName[0].toUpperCase()}${monthName.slice(1)} ${currentYear}`
 
-// Generar días del mes
 const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
-
 const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
+const feriados = [1, 21]
 
-// Feriados simples
-const feriados = [1, 21] // ejemplo: día 1 y 21 del mes
+const porcentaje = computed(() => (currentYear >= 2027 ? 0.16 : 0.1525))
+const retencion = computed(() => (monto.value > 0 ? monto.value * porcentaje.value : 0))
+const total = computed(() => (monto.value > 0 ? monto.value - retencion.value : 0))
+
+const money = (value) =>
+  new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(value || 0)
 </script>
 
 <template>
-  <section class="tools">
-    <div class="container">
-
+  <section class="tools-page">
+    <header class="tools-header">
       <h1>Herramientas útiles</h1>
+      <p>Todo en un solo lugar: cálculo de boleta, accesos clave, asesoría y calendario.</p>
+    </header>
 
-      <!-- 💰 CALCULADORA -->
-      <div class="tool-box">
-        <h2>Calculadora Boleta de Honorarios</h2>
-
-        <input
-          type="number"
-          v-model="monto"
-          placeholder="Ingresa monto bruto"
-        />
-
-        <p>
-          Retención ({{ (porcentaje * 100).toFixed(2) }}%):
-          ${{ retencion.toFixed(0) }}
-        </p>
-
-        <p>
-          Total a recibir: ${{ total.toFixed(0) }}
-        </p>
-      </div>
-      <p style="font-size: 0.8rem; color: gray;">
-         *Este cálculo es referencial según normativa vigente en Chile.
-      </p>
-      <!-- 🔗 LINKS -->
-      <div class="tool-box">
-        <h2>Accesos rápidos</h2>
-        <ul>
-          <li><a href="https://www.sii.cl" target="_blank">Ir al SII</a></li>
+    <div class="tools-grid">
+      <article class="tool-card feature">
+        <h2>Calculadora de Boleta</h2>
+        <label for="monto">Monto bruto</label>
+        <input id="monto" v-model.number="monto" type="number" min="0" step="1000" placeholder="Ej: 650000" />
+        <ul class="stats">
+          <li>Retención ({{ (porcentaje * 100).toFixed(2) }}%): <strong>{{ money(retencion) }}</strong></li>
+          <li>Total a recibir: <strong>{{ money(total) }}</strong></li>
         </ul>
-      </div>
-      <div class="tool-box">
+        <small>*Cálculo referencial según normativa vigente en Chile.</small>
+      </article>
+
+      <article class="tool-card">
+        <h2>Accesos rápidos</h2>
+        <ul class="links">
+          <li><a href="https://www.sii.cl" target="_blank" rel="noreferrer">Portal SII</a></li>
+          <li>
+            <a href="https://www.sii.cl/servicios_online/1039-.html" target="_blank" rel="noreferrer">
+              Boletas de honorarios
+            </a>
+          </li>
+          <li>
+            <a href="https://www.sii.cl/servicios_online/calendario_contribuyente.html" target="_blank" rel="noreferrer">
+              Calendario de contribuyentes
+            </a>
+          </li>
+        </ul>
+      </article>
+
+      <article class="tool-card">
         <h2>Asesoría personalizada</h2>
-        <p>
-          Si necesitas orientación para iniciar o formalizar tu emprendimiento,
-          puedes completar este formulario y así revisaré tu caso de forma más personalizada.
-        </p>
+        <p>Si necesitas apoyo para formalizar o ordenar tu emprendimiento, revisamos tu caso contigo.</p>
+        <a class="cta" href="https://forms.gle/DMbBLFS95o6jUMuP6" target="_blank" rel="noreferrer">Solicitar asesoría</a>
+      </article>
 
-        <a
-          href="https://forms.gle/DMbBLFS95o6jUMuP6"
-          target="_blank"
-          rel="noreferrer"
-          class="form-link-btn"
-        >
-          Solicitar asesoría
-        </a>
-      </div>
-      <!-- 📅 CALENDARIO -->
-      <div class="tool-box">
-        <h2>Calendario del mes</h2>
-
+      <article class="tool-card">
+        <h2>{{ monthLabel }}</h2>
         <div class="calendar">
           <div
             v-for="day in days"
             :key="day"
             class="day"
-            :class="{
-              today: day === today.getDate(),
-              holiday: feriados.includes(day)
-            }"
+            :class="{ today: day === today.getDate(), holiday: feriados.includes(day) }"
           >
             {{ day }}
           </div>
         </div>
-      </div>
+      </article>
     </div>
   </section>
 </template>
+
 <style scoped>
-.tools {
-  padding: 60px 20px;
+.tools-page {
+  display: grid;
+  gap: 1.2rem;
 }
 
-.container {
-  max-width: 800px;
-  margin: auto;
+.tools-header h1 {
+  margin: 0;
+  color: var(--primary);
+  font: 800 2rem/1.1 'Manrope', sans-serif;
 }
 
-.tool-box {
+.tools-header p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+}
+
+.tools-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(290px, 340px);
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0.35rem 0.2rem 0.5rem;
+  scroll-snap-type: x mandatory;
+}
+
+.tool-card {
+  scroll-snap-align: start;
   background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
+  border: 2px solid #8d76a1;
+  border-radius: 16px;
+  box-shadow: 0 14px 28px rgba(49, 34, 61, 0.12);
+  padding: 1rem;
+  min-height: 255px;
 }
 
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+.feature {
+  border-color: #6f4888;
+  box-shadow: 0 16px 30px rgba(71, 44, 92, 0.2);
 }
+
+.tool-card h2 {
+  margin: 0 0 0.75rem;
+  color: #4f3261;
+  font-size: 1.15rem;
+}
+
+.tool-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.tool-card label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.tool-card input {
+  width: 100%;
+  border: 1px solid #bca7cb;
+  border-radius: 10px;
+  padding: 0.65rem;
+}
+
+.stats,
+.links {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.links a {
+  color: #4f3261;
+  font-weight: 600;
+}
+
+.cta {
+  margin-top: 1rem;
+  display: inline-block;
+  background: #6f4888;
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.58rem 1rem;
+  font-weight: 700;
+}
+
 .calendar {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-top: 15px;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
 }
 
 .day {
-  padding: 10px;
   text-align: center;
   border-radius: 8px;
-  background: #f3f3f3;
-  font-size: 0.9rem;
+  padding: 0.38rem 0;
+  background: #f3edf7;
+  font-size: 0.82rem;
 }
 
-/* Hoy */
 .today {
-  background: #9b6bb3;
+  background: #6f4888;
   color: #fff;
   font-weight: 700;
 }
 
-/* Feriados */
 .holiday {
-  background: #ffe4e6;
-  color: #b91c1c;
-}
-.form-link-btn {
-  display: inline-block;
-  margin-top: 10px;
-  text-decoration: none;
-  background: #9b6bb3;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 999px;
-  transition: background 0.3s ease;
+  background: #f8e6ed;
+  color: #8a3556;
 }
 
-.form-link-btn:hover {
-  background: #7e4f98;
+.tools-grid::-webkit-scrollbar {
+  height: 10px;
+}
+
+.tools-grid::-webkit-scrollbar-thumb {
+  background: #b89bc9;
+  border-radius: 999px;
+}
+
+@media (max-width: 900px) {
+  .tools-grid {
+    grid-auto-columns: minmax(260px, 86vw);
+  }
 }
 </style>

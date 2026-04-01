@@ -8,7 +8,7 @@ const avatarUrl = new URL('../assets/img/avatar-1.png', import.meta.url).href
 
       <!-- Avatar -->
       <div class="hero-avatar">
-        <img :src="avatarUrl" alt="Avatar Lo Imaginas" />
+        <img :src="avatarUrl" alt="Avatar ilustrado" />
       </div>
 
       <!-- Texto -->
@@ -69,8 +69,10 @@ const avatarUrl = new URL('../assets/img/avatar-1.png', import.meta.url).href
 }
 
 .hero-avatar img {
-  width: 160px;
-  height: 160px;
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+  object-position: center;
   border-radius: 50%;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
