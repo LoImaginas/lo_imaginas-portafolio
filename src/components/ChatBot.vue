@@ -1,7 +1,7 @@
 <script setup>
 import { nextTick, onBeforeUnmount, ref } from 'vue'
 
-const avatarUrl = new URL('../assets/img/Flotante_trim.backup2.png', import.meta.url).href
+const avatarUrl = new URL('../assets/img/Flotante_trim.png', import.meta.url).href
 
 const isOpen = ref(false)
 const isTyping = ref(false)
