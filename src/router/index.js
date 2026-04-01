@@ -6,7 +6,7 @@ import ToolsView from '../views/ToolsView.vue'
 import ContactView from '../views/ContactView.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', name: 'home', component: HomeView },
     { path: '/sobre-mi', name: 'about', component: AboutView },
